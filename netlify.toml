@@ -1,0 +1,33 @@
+# ==============================================================================
+# Netlify Configuration for Crystal Lights
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+# ==============================================================================
+
+[build]
+  publish = "."
+
+# ------------------------------------------------------------------------------
+# Caching headers for minimum bandwidth consumption
+# ------------------------------------------------------------------------------
+
+# Static assets (images, css, js, fonts) cached for 1 year immutable
+# Returning visitors will load assets from local cache with 0 Netlify bandwidth.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files are not cached to ensure visitors always get the latest site updates
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Security and performance headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
