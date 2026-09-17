@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crystal Lights | Permanent Outdoor LED Lighting in British Columbia</title>
 <meta name="description" content="Permanent, app-controlled outdoor LED lighting for BC homes. Invisible by day, brilliant by night. 16 million colours, 10-year warranty, professionally installed across the Lower Mainland, Vancouver Island and the Okanagan.">
-<meta name="theme-color" content="#04060b">
+<meta name="theme-color" content="#0D1930">
 <link rel="canonical" href="https://crystallights.ca/">
 
 <meta property="og:type" content="website">
@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=20260917c">
 
 <script type="application/ld+json">
 {
@@ -179,14 +179,14 @@
       </span>
 
       <h1 class="hero__title">
-        <span class="line"><span>Sixteen</span></span>
-        <span class="line"><span>million</span></span>
-        <span class="line"><span class="accent spectrum-text">ways home.</span></span>
+        <span class="line"><span>Permanent</span></span>
+        <span class="line"><span>outdoor</span></span>
+        <span class="line"><span class="accent spectrum-text">lighting.</span></span>
       </h1>
 
       <p class="hero__sub">
-        Permanent outdoor lighting that vanishes into your roofline by day and repaints
-        your whole house by night. One install. Every colour. Zero ladders, forever.
+        Lights that vanish into your roofline by day and repaint your whole house by
+        night. One install. Every colour. Zero ladders, forever.
       </p>
 
       <div class="hero__cta">
@@ -284,11 +284,11 @@
   </div>
 </section>
 
-<!-- ========================= SCROLL-DRIVEN SCENE ========================= -->
-<!-- The house relights continuously as this section scrolls. Stops, copy and
-     colour ramp all live in the scrollScene module in assets/js/main.js. -->
-<section class="scene" data-scene aria-label="One house through a year of lighting scenes">
-  <div class="scene__sticky">
+<!-- ========================= LIGHTING SCENES ========================= -->
+<!-- Starts switched off. Visitors pick a scene with the buttons; nothing is tied
+     to scrolling. Stops and copy live in the sceneSwitcher module in main.js. -->
+<section class="scene" data-scene aria-label="One house, every lighting scene">
+  <div class="scene__frame">
     <div class="scene__stage" aria-hidden="true">
       <img src="assets/img/gallery/home-green.jpg" alt="" loading="lazy">
       <span class="scene__glow"></span>
@@ -297,31 +297,24 @@
 
     <div class="scene__inner">
       <div>
-        <span class="scene__label">One house · one system · one year</span>
-        <h2 class="scene__title scene__swap" data-scene-title>Invisible.</h2>
-        <p class="scene__copy scene__swap" data-scene-copy>At noon it is a clean trim line under your roof edge. Most visitors never notice it is there until the sun goes down.</p>
+        <span class="scene__label">One house · one system · every occasion</span>
+        <h2 class="scene__title scene__swap" data-scene-title aria-live="polite">Off.</h2>
+        <p class="scene__copy scene__swap" data-scene-copy>Switched off it is a slim trim line under your roof edge, powder-coated to match your fascia. Most visitors never notice it is there at all.</p>
       </div>
 
-      <div class="stack" style="--stack-gap:1.25rem">
-        <div class="scene__rail">
-        <span class="scene__tick is-on" style="--tick:#8a95ac"><i aria-hidden="true"></i><span>Off</span></span>
-        <span class="scene__tick" style="--tick:#ffd166"><i aria-hidden="true"></i><span>Everyday</span></span>
-        <span class="scene__tick" style="--tick:#ff7a1a"><i aria-hidden="true"></i><span>Halloween</span></span>
-        <span class="scene__tick" style="--tick:#e5484d"><i aria-hidden="true"></i><span>Christmas</span></span>
-        <span class="scene__tick" style="--tick:#34d399"><i aria-hidden="true"></i><span>Spring</span></span>
-        <span class="scene__tick" style="--tick:#a855f7"><i aria-hidden="true"></i><span>Anything</span></span>
-      </div>
-        <span class="scene__hint"><i aria-hidden="true"></i>Keep scrolling</span>
+      <div class="stack" style="--stack-gap:1.1rem">
+        <div class="scene__rail" role="group" aria-label="Choose a lighting scene">
+          <button type="button" class="scene__tick is-on" data-scene-stop="0" aria-pressed="true" style="--tick:#8a95ac"><i aria-hidden="true"></i><span>Off</span></button>
+          <button type="button" class="scene__tick" data-scene-stop="1" aria-pressed="false" style="--tick:#ffd166"><i aria-hidden="true"></i><span>Everyday</span></button>
+          <button type="button" class="scene__tick" data-scene-stop="2" aria-pressed="false" style="--tick:#ff7a1a"><i aria-hidden="true"></i><span>Halloween</span></button>
+          <button type="button" class="scene__tick" data-scene-stop="3" aria-pressed="false" style="--tick:#e5484d"><i aria-hidden="true"></i><span>Christmas</span></button>
+          <button type="button" class="scene__tick" data-scene-stop="4" aria-pressed="false" style="--tick:#34d399"><i aria-hidden="true"></i><span>Spring</span></button>
+          <button type="button" class="scene__tick" data-scene-stop="5" aria-pressed="false" style="--tick:#a855f7"><i aria-hidden="true"></i><span>Anything</span></button>
+        </div>
+        <span class="scene__hint"><i aria-hidden="true"></i>Tap a scene to light up the house</span>
       </div>
     </div>
   </div>
-
-  <div class="scene__spacer" aria-hidden="true"></div>
-  <div class="scene__spacer" aria-hidden="true"></div>
-  <div class="scene__spacer" aria-hidden="true"></div>
-  <div class="scene__spacer" aria-hidden="true"></div>
-  <div class="scene__spacer" aria-hidden="true"></div>
-  <div class="scene__spacer" aria-hidden="true"></div>
 </section>
 
 <!-- ========================= COLOUR STUDIO ========================= -->
@@ -389,7 +382,7 @@
     <div class="flex-between" data-reveal>
       <div class="section-head">
         <span class="secmark"><b>05</b> What we do</span>
-        <h2 class="h2">One system. Every occasion on your calendar.</h2>
+        <h2 class="h2">Permanent roofline lighting, for every occasion.</h2>
       </div>
       <a class="link-arrow" href="services.html">
         All services
@@ -397,7 +390,7 @@
       </a>
     </div>
 
-    <div class="grid grid--3 mt-lg">
+    <div class="grid grid--2 mt-lg">
       <article class="card" data-reveal>
         <span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></svg></span>
         <h3>Permanent LED Lighting</h3>
@@ -410,29 +403,6 @@
         <p>Transform your home or business with festive lighting displays for Christmas, Halloween, Diwali and every occasion in between.</p>
       </article>
 
-      <article class="card" data-reveal>
-        <span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7Z"/></svg></span>
-        <h3>Landscape Design</h3>
-        <p>Highlight the beauty of your outdoor spaces with custom lighting designs for gardens, patios and walkways.</p>
-      </article>
-
-      <article class="card" data-reveal>
-        <span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
-        <h3>Architectural Accent</h3>
-        <p>Elevate your property's design with strategic lighting that accentuates columns, gables, peaks and stonework.</p>
-      </article>
-
-      <article class="card" data-reveal>
-        <span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg></span>
-        <h3>Event Lighting</h3>
-        <p>Custom lighting setups for weddings, corporate events, parties and anything else worth lighting up.</p>
-      </article>
-
-      <article class="card" data-reveal>
-        <span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
-        <h3>Personalized Planning</h3>
-        <p>A lighting plan built around your home's architecture, your style and your budget — free, and with no obligation.</p>
-      </article>
     </div>
   </div>
 </section>
@@ -475,40 +445,29 @@
 </section>
 
 <!-- ========================= APP / CONTROL ========================= -->
-<section class="section">
-  <div class="shell split split--reverse">
-    <div data-reveal>
-      <div class="frame frame--wide">
-        <img src="assets/img/gallery/ranch-spectrum.jpg" alt="A large two-storey home washed in a full spectrum of colour across every roofline." loading="lazy" style="object-position:center">
-      </div>
+<section class="section section--tight">
+  <div class="shell appsec">
+    <div class="phones" data-reveal>
+      <img class="phones__a" src="assets/img/app/app-colour.png" width="447" height="900" loading="lazy"
+           alt="The Crystal Lights app's colour screen: a colour wheel, brightness slider, warm and cool white controls and quick colour swatches.">
+      <img class="phones__b" src="assets/img/app/app-presets.png" width="447" height="900" loading="lazy"
+           alt="The app's pattern library, with presets for Christmas, Diwali, Halloween, Canada Day, sports teams and more.">
     </div>
 
     <div data-reveal>
-      <span class="eyebrow">Total control</span>
+      <span class="eyebrow">Included with every install</span>
       <h2 class="h2">Your whole house, <span class="accent gold">in your pocket.</span></h2>
-      <p class="lede mt-sm">
-        Connect once to your Wi-Fi and the system is yours from anywhere — the driveway,
-        the office, or a hotel room three time zones away.
+      <p class="mt-xs">
+        Every system comes with its own app. Change the colour, set the brightness or pick a
+        holiday scene from your phone, wherever you are.
       </p>
-
-      <div class="grid grid--2 mt-md" style="--stack-gap:1rem">
-        <div class="card">
-          <h3 class="h4">Zone by zone</h3>
-          <p>Split the house into zones — garage, gables, porch, fence line — and give each its own colour.</p>
-        </div>
-        <div class="card">
-          <h3 class="h4">Every bulb, individually</h3>
-          <p>Address a single light on its own. Alternating patterns, gradients, chases — all of it.</p>
-        </div>
-        <div class="card">
-          <h3 class="h4">Set it and forget it</h3>
-          <p>Schedule dusk-to-dawn, or have the house dress itself for a holiday while you're away.</p>
-        </div>
-        <div class="card">
-          <h3 class="h4">1,000+ presets</h3>
-          <p>Start from a built-in scene, tweak it, save it, and share it with friends and neighbours.</p>
-        </div>
-      </div>
+      <ul class="appfeat">
+        <li><strong>Any colour</strong><span>Colour wheel, swatches, warm &amp; cool whites</span></li>
+        <li><strong>Brightness</strong><span>From full brilliance to a soft glow</span></li>
+        <li><strong>Ready-made scenes</strong><span>Christmas, Diwali, Halloween and more</span></li>
+        <li><strong>Timers</strong><span>On at dusk, off at bedtime, automatically</span></li>
+      </ul>
+      <p class="small muted mt-sm">We set up the app with you on install day.</p>
     </div>
   </div>
 </section>
@@ -574,99 +533,57 @@
   </div>
 </section>
 
-<!-- ========================= GALLERY STRIP ========================= -->
+<!-- ========================= OUR WORK ========================= -->
 <section class="section">
   <div class="shell">
     <div class="flex-between" data-reveal>
       <div class="section-head">
-        <span class="secmark"><b>04</b> Recent work</span>
+        <span class="secmark"><b>04</b> Our work</span>
         <h2 class="h2">Real homes.<br>Real BC nights.</h2>
+        <p class="lede">Every photo here is a Crystal Lights install.</p>
       </div>
-      <a class="link-arrow" href="gallery.html">
-        View the full gallery
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
     </div>
-  </div>
 
-  <div class="shell mt-lg" data-reveal>
-    <div class="hstrip" data-hstrip>
-      <figure class="hcard" data-lb data-title="Modern estate" data-sub="North Shore · Warm white">
-        <img src="assets/img/gallery/modern-front.jpg" alt="Modern estate — North Shore · Warm white" loading="lazy" style="--focus:center 45%">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">01</span>
-          <strong>Modern estate</strong>
-          <span>North Shore · Warm white</span>
-        </figcaption>
+    <div class="workgrid mt-lg" data-reveal>
+      <figure class="tile tile--feature" data-lb data-title="Christmas, one tap" data-sub="Seasonal">
+        <span class="tile__badge">Seasonal</span>
+        <img src="assets/img/gallery/craftsman-christmas.jpg" alt="A craftsman home outlined in red, green and white Christmas lighting." loading="lazy" style="--focus:center 42%">
+        <figcaption class="tile__meta"><strong>Christmas, one tap</strong><span>Seasonal</span></figcaption>
       </figure>
 
-      <figure class="hcard" data-lb data-title="Emerald roofline" data-sub="Vancouver · Custom scene">
-        <img src="assets/img/gallery/home-green.jpg" alt="Emerald roofline — Vancouver · Custom scene" loading="lazy" style="--focus:center">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">02</span>
-          <strong>Emerald roofline</strong>
-          <span>Vancouver · Custom scene</span>
-        </figcaption>
+      <figure class="tile" data-lb data-title="Emerald roofline" data-sub="Custom colour">
+        <span class="tile__badge">Custom colour</span>
+        <img src="assets/img/gallery/home-green.jpg" alt="A home lit entirely in emerald green from roofline to porch." loading="lazy" style="--focus:center">
+        <figcaption class="tile__meta"><strong>Emerald roofline</strong><span>Custom colour</span></figcaption>
       </figure>
 
-      <figure class="hcard" data-lb data-title="Christmas, one tap" data-sub="Fraser Valley · Seasonal">
-        <img src="assets/img/gallery/craftsman-christmas.jpg" alt="Christmas, one tap — Fraser Valley · Seasonal" loading="lazy" style="--focus:center 42%">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">03</span>
-          <strong>Christmas, one tap</strong>
-          <span>Fraser Valley · Seasonal</span>
-        </figcaption>
+      <figure class="tile" data-lb data-title="Craftsman in emerald" data-sub="Custom colour">
+        <span class="tile__badge">Custom colour</span>
+        <img src="assets/img/gallery/cottage-teal.jpg" alt="A craftsman home with every gable and porch column outlined in emerald." loading="lazy" style="--focus:center">
+        <figcaption class="tile__meta"><strong>Craftsman in emerald</strong><span>Custom colour</span></figcaption>
       </figure>
 
-      <figure class="hcard" data-lb data-title="Emerald craftsman" data-sub="Fraser Valley · Custom scene">
-        <img src="assets/img/gallery/cottage-teal.jpg" alt="Emerald craftsman — Fraser Valley · Custom scene" loading="lazy" style="--focus:center">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">04</span>
-          <strong>Emerald craftsman</strong>
-          <span>Fraser Valley · Custom scene</span>
-        </figcaption>
+      <figure class="tile" data-lb data-title="Everyday warm white" data-sub="Warm white">
+        <span class="tile__badge">Warm white</span>
+        <img src="assets/img/gallery/craftsman-warm.jpg" alt="A craftsman home at dusk in warm white along every roofline." loading="lazy" style="--focus:center 45%">
+        <figcaption class="tile__meta"><strong>Everyday warm white</strong><span>Warm white</span></figcaption>
       </figure>
 
-      <figure class="hcard" data-lb data-title="Violet &amp; ruby" data-sub="Vancouver · Custom scene">
-        <img src="assets/img/gallery/home-violet.jpg" alt="Violet and ruby — Vancouver · Custom scene" loading="lazy" style="--focus:center">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">05</span>
-          <strong>Violet &amp; ruby</strong>
-          <span>Vancouver · Custom scene</span>
-        </figcaption>
+      <figure class="tile" data-lb data-title="Install day" data-sub="Our crew">
+        <span class="tile__badge">Our crew</span>
+        <img src="assets/img/gallery/install-okanagan.jpg" alt="Crystal Lights technicians installing track on a home, with the company van parked out front." loading="lazy" style="--focus:center 55%">
+        <figcaption class="tile__meta"><strong>Install day</strong><span>Our crew</span></figcaption>
       </figure>
 
-      <figure class="hcard" data-lb data-title="Rear elevation" data-sub="North Shore · Warm white">
-        <img src="assets/img/gallery/modern-rear.jpg" alt="Rear elevation — North Shore · Warm white" loading="lazy" style="--focus:center 48%">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">06</span>
-          <strong>Rear elevation</strong>
-          <span>North Shore · Warm white</span>
-        </figcaption>
-      </figure>
-
-      <figure class="hcard" data-lb data-title="Full spectrum" data-sub="Custom scene">
-        <img src="assets/img/gallery/ranch-spectrum.jpg" alt="Full spectrum — Custom scene" loading="lazy" style="--focus:center">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">07</span>
-          <strong>Full spectrum</strong>
-          <span>Custom scene</span>
-        </figcaption>
-      </figure>
-
-      <figure class="hcard" data-lb data-title="The track, up close" data-sub="Detail">
-        <img src="assets/img/gallery/track-detail.jpg" alt="The track, up close — Detail" loading="lazy" style="--focus:center">
-        <figcaption class="hcard__body">
-          <span class="hcard__n">08</span>
-          <strong>The track, up close</strong>
-          <span>Detail</span>
-        </figcaption>
+      <figure class="tile" data-lb data-title="Discreet by day" data-sub="Daylight">
+        <span class="tile__badge">Daylight</span>
+        <img src="assets/img/gallery/daytime-discreet.jpg" alt="A home in daylight where the installed lighting track reads as a clean trim line along the roof." loading="lazy" style="--focus:center 45%">
+        <figcaption class="tile__meta"><strong>Discreet by day</strong><span>Daylight</span></figcaption>
       </figure>
     </div>
 
-    <div class="flex-between" style="align-items:center">
-      <span class="hprogress" data-hprogress aria-hidden="true"><i></i></span>
-      <span class="scene__hint hide-sm"><i aria-hidden="true"></i>Drag to explore</span>
+    <div class="text-center mt-lg" data-reveal>
+      <a class="btn btn--lg" href="gallery.html" data-magnetic>Show All Our Work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
     </div>
   </div>
 </section>
@@ -705,6 +622,8 @@
 </section>
 
 <!-- ========================= TESTIMONIALS ========================= -->
+<!-- Reviews are rendered from assets/js/reviews.js — edit that file to add,
+     remove or update a review (name, city, stars, date, text). -->
 <section class="section">
   <div class="shell">
     <div class="flex-between" data-reveal>
@@ -722,150 +641,7 @@
       </div>
     </div>
 
-    <!-- Real Google reviews, reproduced verbatim from crystallights.ca/reviews
-         (all verified 5-star). Add new ones by copying a .quote block. -->
-    <div class="quotes mt-lg" data-quotes data-reveal>
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>The Crystal Light Team was amazing. They arrived early and completed the installation in an efficient manner. They were polite, organized, and did not leave any debris behind. The product itself is amazing, exactly what we were looking for. Our house feels like it has received a facelift. Thank you to the crystal light team.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">RG</span>
-          <span class="quote__who"><strong>Raj Gill</strong><span>Google review · 1 April 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>I just had the pleasure of Love and his team install permanent lights on my home. The team was efficient, tidy, and professional. I was walked through the lighting app step by step until I was comfortable in its use. Love was friendly and kind. I appreciated his patience with the technology aspect of the lighting sequences. Would highly recommend their service.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">LS</span>
-          <span class="quote__who"><strong>Louise Siegmund</strong><span>Google review · 19 March 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>We recently had Crystal Lights install lights on our home, and the experience was fantastic from start to finish. The team was professional, efficient, and clearly takes pride in their work. The installation was clean and seamless, and the final result looks amazing, exactly what we were hoping for. The lighting system is high quality and really elevates the look of our home year-round.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">SS</span>
-          <span class="quote__who"><strong>Scott Sahaydak</strong><span>Google review · 6 April 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>We had a great experience with Crystal Lights from start to finish. Love and his team explained everything clearly, showed us the setup in person, and the installation turned out exactly as promised. The permanent lighting looks beautiful and the warranty gives us peace of mind.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">AS</span>
-          <span class="quote__who"><strong>Alexa S</strong><span>Google review · 19 March 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>Crystal Lights did a great job on our new permanent lights. The showed up on time, were polite and completed the installation professionally. When the install was complete they helped us set up the app and showed us the different light features.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">JM</span>
-          <span class="quote__who"><strong>Jennifer Mitchell</strong><span>Google review · 20 March 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>Crystal Lights did a fantastic job from start to finish. The team was easy to deal with, the installation was very clean, and the final result looks incredible. Really happy with how everything turned out — would definitely recommend!</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">AS</span>
-          <span class="quote__who"><strong>Amanpreet Singh</strong><span>Google review · 22 April 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>Had a great experience with the installation. The team was friendly, knowledgeable, and completed the work quickly without any issues. Everything looks perfect and works great. Really appreciate the quality service. Highly recommended.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">UT</span>
-          <span class="quote__who"><strong>Urban Tag</strong><span>Google review · 6 April 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>Absolutely love the results! Love the team and they did a fantastic job — super clean and professional. Would 100% recommend to anyone!! So so good.</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">ED</span>
-          <span class="quote__who"><strong>Emily Dinnell</strong><span>Google review · 26 March 2026</span></span>
-        </figcaption>
-      </figure>
-
-      <figure class="quote">
-        <span class="quote__stars" aria-label="5 out of 5 stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>
-        </span>
-        <blockquote>Crystal Lights did an amazing job. The installation was clean and professional, and the lights completely transformed our home. Highly recommend!</blockquote>
-        <figcaption>
-          <span class="quote__av" aria-hidden="true">RK</span>
-          <span class="quote__who"><strong>Rohit Kamboj</strong><span>Google review · 22 April 2026</span></span>
-        </figcaption>
-      </figure>
-    </div>
-    </div>
-
-    <!-- ==========================================================
-         PLACEHOLDER REVIEWS — replace before launch.
-         Paste real Google review text, names and cities here.
-         ========================================================== -->
+    <div class="quotes mt-lg" data-quotes data-reveal></div>
   </div>
 </section>
 
@@ -1010,10 +786,6 @@
         <ul>
           <li><a href="services.html#permanent">Permanent LED Lighting</a></li>
           <li><a href="services.html#seasonal">Seasonal Displays</a></li>
-          <li><a href="services.html#landscape">Landscape Design</a></li>
-          <li><a href="services.html#architectural">Architectural Accent</a></li>
-          <li><a href="services.html#events">Event Lighting</a></li>
-          <li><a href="services.html#planning">Personalized Planning</a></li>
         </ul>
       </div>
 
@@ -1070,6 +842,7 @@
   <a class="btn" href="contact.html">Free Quote</a>
 </div>
 
-<script src="assets/js/main.js" defer></script>
+<script src="assets/js/reviews.js?v=20260917c" defer></script>
+<script src="assets/js/main.js?v=20260917c" defer></script>
 </body>
 </html>

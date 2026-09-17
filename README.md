@@ -120,11 +120,16 @@ swap the file, raise the height, and delete the `.brand__text` span next to it.
 
 ## Testimonials
 
-The nine reviews on the homepage are **real**, reproduced verbatim from
-crystallights.ca/reviews, where all of them are verified 5-star Google reviews. Names and dates
-are as published.
+Reviews live in **`assets/js/reviews.js`** — that is the only file to edit. Each entry has a
+`name`, `city`, `stars` (1–5), `date` and `text`, and the homepage renders the stars, score,
+name, city and date automatically.
 
-To add more, copy a `.quote` block. Do not invent reviews.
+The six reviews there are real 5-star Google reviews, copied word for word from
+crystallights.ca/reviews (the owner asked for some names to be left out).
+
+**Cities are blank.** Google reviews do not show where the reviewer lives, so there was no
+real city to use. Ask the owner for each customer's city, fill in the `city` field, and it
+appears on the card as "City, BC". Do not guess.
 
 ---
 
@@ -132,22 +137,17 @@ To add more, copy a `.quote` block. Do not invent reviews.
 
 The product is light, so light drives the interface. Three features carry the design.
 
-### 1. The scroll-driven scene (`index.html`, the `.scene` section)
+### 1. The lighting-scenes section (`index.html`, the `.scene` section)
 
-A pinned, full-viewport section where **the house relights continuously as you scroll** —
-off, warm white, Halloween, Christmas, spring, then a free sweep through the spectrum.
-Scroll position maps onto a colour ramp, so it is a continuous relight rather than a
-slideshow of fixed states.
+A full-width photo of a house with a row of buttons: Off, Everyday, Halloween, Christmas,
+Spring, Anything. It **starts on Off**, and each button relights the house and changes the
+headline. It is not tied to scrolling (the owner didn't want the pinned-scroll version).
 
-Everything lives in the `scrollScene` module in `assets/js/main.js`. To change the journey,
-edit the `STOPS` array — each entry carries a rotation, saturation, brightness, glow, a rail
-colour, and its own headline and copy.
+Everything lives in the `sceneSwitcher` module in `assets/js/main.js`. To change a scene,
+edit the `STOPS` array — rotation, saturation, brightness, glow, colour, headline and copy.
 
-**If you edit `STOPS`, the rail labels in `index.html` must match it, one for one, in the same
-order.** They are two separate lists and nothing enforces the pairing.
-
-To change how long the section takes to scroll through, adjust `.scene__spacer { height }`
-in the stylesheet. One spacer per stop.
+**The buttons in `index.html` must match `STOPS` one for one, in the same order.**
+They are two separate lists and nothing enforces the pairing.
 
 ### 2. The hero relight (`index.html`)
 
@@ -251,10 +251,15 @@ available.
 
 ## Local preview
 
-Any static server works. From this folder:
+Use the included server — **not** plain `python -m http.server`:
 
 ```bash
-python -m http.server 4176
+python tools/serve.py
 ```
 
-Then open `http://localhost:4176`.
+Then open http://localhost:4176. Plain `http.server` sends no cache headers, so the
+browser keeps showing old copies of pages, styles and scripts after they change, and
+edits look like they didn't work. `tools/serve.py` tells the browser never to cache.
+
+CSS and JS links also carry a version tag (`style.css?v=…`). When you publish changes to
+a live host, bump that tag in every page so visitors' browsers fetch the new files.

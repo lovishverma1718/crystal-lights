@@ -747,24 +747,20 @@
   })();
 
   /* ------------------------------------------------------------------
-     Scroll-driven relighting scene.
-     Scroll position maps continuously onto a colour ramp, so the house
-     relights as you move rather than cutting between states.
+     Lighting scenes — button driven.
+     The section starts switched off; each button relights the house.
+     Nothing here is tied to scroll position.
      ------------------------------------------------------------------ */
-  (function scrollScene() {
+  (function sceneSwitcher() {
     var scene = document.querySelector("[data-scene]");
     if (!scene) return;
 
-    var sticky = scene.querySelector(".scene__sticky");
     var title = document.querySelector("[data-scene-title]");
     var copy = document.querySelector("[data-scene-copy]");
-    var ticks = Array.prototype.slice.call(scene.querySelectorAll(".scene__tick"));
+    var buttons = Array.prototype.slice.call(scene.querySelectorAll("[data-scene-stop]"));
 
-    /* Same calibrated photograph as the hero. Rotations wind forwards on
-       purpose: 210 -> 360 sweeps red through orange and gold into green, and
-       360 -> 480 carries green through cyan into violet. Scrolling therefore
-       moves the house through a continuous colour sweep rather than cutting
-       between fixed states. */
+    /* Rotations are measured against home-green.jpg, not calculated — CSS
+       hue-rotate is a matrix approximation. See README before changing. */
     var STOPS = [
       { rot: 270, sat: 0.10, bri: 0.30, glow: 0.0, c: "#8a95ac",
         title: "Off.",
@@ -783,79 +779,47 @@
         copy: "Emerald for St. Patrick's, pastels for spring, your team's colours on game night. Changing the whole house takes about four seconds." },
       { rot: 480, sat: 1.45, bri: 1.00, glow: 0.32, c: "#a855f7",
         title: "Anything else.",
-        copy: "Sixteen million colours, every bulb addressable, a thousand presets built in. Birthdays, anniversaries, or a colour that simply suits the evening." }
+        copy: "Sixteen million colours, every bulb addressable, hundreds of presets built in. Birthdays, anniversaries, or a colour that simply suits the evening." }
     ];
 
-    var last = -1;
+    var current = -1;
 
-    var setStop = function (idx) {
-      if (idx === last) return;
-      last = idx;
+    var show = function (idx, instant) {
+      if (idx === current) return;
+      current = idx;
       var s = STOPS[idx];
 
-      [title, copy].forEach(function (el) { if (el) el.classList.add("is-changing"); });
+      scene.style.setProperty("--scene-fx",
+        "hue-rotate(" + s.rot + "deg) saturate(" + s.sat + ") brightness(" + s.bri + ")");
+      scene.style.setProperty("--scene-glow", String(s.glow));
+      scene.style.setProperty("--scene-tint", s.c);
 
+      buttons.forEach(function (btn, n) {
+        btn.classList.toggle("is-on", n === idx);
+        btn.setAttribute("aria-pressed", n === idx ? "true" : "false");
+      });
+
+      if (instant) {
+        if (title) title.textContent = s.title;
+        if (copy) copy.textContent = s.copy;
+        return;
+      }
+
+      [title, copy].forEach(function (el) { if (el) el.classList.add("is-changing"); });
       setTimeout(function () {
         if (title) title.textContent = s.title;
         if (copy) copy.textContent = s.copy;
         [title, copy].forEach(function (el) { if (el) el.classList.remove("is-changing"); });
       }, 200);
-
-      ticks.forEach(function (t, n) { t.classList.toggle("is-on", n === idx); });
     };
 
-    var paint = function (rot, sat, bri, glow, tint) {
-      scene.style.setProperty("--scene-fx",
-        "hue-rotate(" + rot.toFixed(1) + "deg) saturate(" + sat.toFixed(2) +
-        ") brightness(" + bri.toFixed(2) + ")");
-      scene.style.setProperty("--scene-glow", glow.toFixed(3));
-      scene.style.setProperty("--scene-tint", tint);
-    };
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        show(parseInt(btn.getAttribute("data-scene-stop"), 10), false);
+      });
+    });
 
-    var update = function () {
-      var travel = scene.offsetHeight - sticky.offsetHeight;
-
-      // No scroll distance to work with (a collapsed viewport, or the section
-      // laid out before its spacers resolve). Fall back to the everyday scene
-      // so the photograph is never left sitting there unlit and raw.
-      if (travel <= 0) {
-        var f = STOPS[1];
-        paint(f.rot, f.sat, f.bri, f.glow, f.c);
-        setStop(1);
-        return;
-      }
-
-      var p = clamp(-scene.getBoundingClientRect().top / travel, 0, 1);
-      var pos = p * (STOPS.length - 1);
-      var i = clamp(Math.floor(pos), 0, STOPS.length - 2);
-      var t = pos - i;
-      var a = STOPS[i], b = STOPS[i + 1];
-
-      paint(lerp(a.rot, b.rot, t), lerp(a.sat, b.sat, t), lerp(a.bri, b.bri, t),
-            lerp(a.glow, b.glow, t), t < 0.5 ? a.c : b.c);
-
-      setStop(Math.round(pos));
-    };
-
-    if (reduceMotion) {
-      var s1 = STOPS[1];
-      paint(s1.rot, s1.sat, s1.bri, s1.glow, s1.c);
-      setStop(1);
-      return;
-    }
-
-    ticks.forEach(function (t, n) { t.style.setProperty("--tick", STOPS[n].c); });
-
-    var ticking = false;
-    var onScroll = function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { update(); ticking = false; });
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    show(0, true);
   })();
 
   /* ------------------------------------------------------------------
@@ -907,3 +871,57 @@
     });
   })();
 })();
+
+/* ==========================================================================
+   Reviews — rendered from assets/js/reviews.js
+   ========================================================================== */
+(function () {
+  "use strict";
+
+  var rail = document.querySelector("[data-quotes]");
+  var data = window.CL_REVIEWS;
+  if (!rail || !data || !data.length) return;
+
+  var esc = function (v) {
+    return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+
+  var STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9Z"/></svg>';
+  var PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+  var initials = function (name) {
+    var parts = String(name).trim().split(/\s+/);
+    return (parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : parts[0].slice(0, 2)).toUpperCase();
+  };
+
+  rail.innerHTML = data.map(function (r) {
+    var n = Math.max(1, Math.min(5, Math.round(Number(r.stars) || 5)));
+    var stars = "";
+    for (var i = 0; i < 5; i++) stars += '<span class="' + (i < n ? "" : "is-empty") + '">' + STAR + "</span>";
+
+    var city = String(r.city || "").trim();
+    var where = city
+      ? '<span class="quote__city">' + PIN + esc(/,\s*[A-Z]{2}$/.test(city) ? city : city + ", BC") + "</span>"
+      : "";
+
+    return (
+      '<figure class="quote">' +
+        '<div class="quote__top">' +
+          '<span class="quote__stars" role="img" aria-label="' + n + ' out of 5 stars">' + stars + "</span>" +
+          '<span class="quote__score">' + n + ".0</span>" +
+        "</div>" +
+        "<blockquote>" + esc(r.text) + "</blockquote>" +
+        "<figcaption>" +
+          '<span class="quote__av" aria-hidden="true">' + esc(initials(r.name)) + "</span>" +
+          '<span class="quote__who"><strong>' + esc(r.name) + "</strong>" +
+            where +
+            '<span class="quote__meta">Google review · ' + esc(r.date) + "</span>" +
+          "</span>" +
+        "</figcaption>" +
+      "</figure>"
+    );
+  }).join("");
+})();
+
