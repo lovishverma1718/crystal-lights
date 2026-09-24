@@ -10,18 +10,34 @@
 # Caching headers for minimum bandwidth consumption
 # ------------------------------------------------------------------------------
 
-# Static assets (images, css, js, fonts) cached for 1 year immutable
-# Returning visitors will load assets from local cache with 0 Netlify bandwidth.
+# Static media and fonts cached for long-term delivery
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/assets/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# HTML files are not cached to ensure visitors always get the latest site updates
+# CSS & JavaScript revalidate immediately so updates reflect instantly
 [[headers]]
-  for = "/*.html"
+  for = "/assets/css/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# HTML files revalidate on every visit
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Clear-Site-Data = '"cache"'
 
 # Security and performance headers
 [[headers]]
