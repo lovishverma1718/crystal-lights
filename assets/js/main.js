@@ -19,9 +19,12 @@
      ------------------------------------------------------------------ */
   (function stickyHeader() {
     var header = $(".site-header");
+    var wrap = $(".header-wrap");
     if (!header) return;
     var onScroll = function () {
-      header.classList.toggle("is-stuck", window.scrollY > 12);
+      var isStuck = window.scrollY > 12;
+      header.classList.toggle("is-stuck", isStuck);
+      if (wrap) wrap.classList.toggle("is-stuck", isStuck);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -331,17 +334,26 @@
     if (!bar) return;
     var tiles = $$("[data-tags]");
 
+    function applyFilter(key) {
+      tiles.forEach(function (tile) {
+        var tags = (tile.dataset.tags || "").split(" ");
+        var show = key === "all" || tags.indexOf(key) > -1;
+        tile.classList.toggle("is-hidden", !show);
+      });
+    }
+
     bar.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-filter]");
       if (!btn) return;
       $$("[data-filter]", bar).forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
       btn.setAttribute("aria-pressed", "true");
-      var key = btn.dataset.filter;
-      tiles.forEach(function (tile) {
-        var show = key === "all" || tile.dataset.tags.split(" ").indexOf(key) > -1;
-        tile.classList.toggle("is-hidden", !show);
-      });
+      applyFilter(btn.dataset.filter);
     });
+
+    var activeBtn = $("[data-filter][aria-pressed='true']", bar) || $("[data-filter]", bar);
+    if (activeBtn) {
+      applyFilter(activeBtn.dataset.filter);
+    }
   })();
 
   /* ------------------------------------------------------------------
@@ -694,132 +706,165 @@
   })();
 
   /* ------------------------------------------------------------------
-     Hero scene cycle — the hero photograph relights itself on a loop,
-     so the product is demonstrated before a word is read.
+     Hero scene cycle — cycles through the real installation photographs.
      ------------------------------------------------------------------ */
   (function heroCycle() {
-    var img = document.querySelector("[data-hero-relight]");
+    var slides = $$("[data-hero-slide]");
+    var img = $("[data-hero-relight]");
+    var dot = $("[data-hero-hue]");
+    var name = $("[data-hero-scene]");
+
+    if (slides.length) {
+      var SCENES = [
+        { label: "Warm White", color: "#ffd166" },
+        { label: "Christmas", color: "#e5484d" },
+        { label: "Festival Violet", color: "#a855f7" },
+        { label: "Crisp White", color: "#ffffff" },
+        { label: "Cool Daylight", color: "#22d3ee" }
+      ];
+      var idx = 0;
+      var showSlide = function (n) {
+        idx = (n + slides.length) % slides.length;
+        slides.forEach(function (s, i) {
+          s.classList.toggle("is-active", i === idx);
+        });
+        var sc = SCENES[idx % SCENES.length];
+        if (dot && sc) dot.style.setProperty("--hue", sc.color);
+        if (name && sc) name.textContent = sc.label;
+      };
+      showSlide(0);
+      if (reduceMotion) return;
+      var timer = setInterval(function () { showSlide(idx + 1); }, 4200);
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) { clearInterval(timer); timer = null; }
+        else if (!timer) timer = setInterval(function () { showSlide(idx + 1); }, 4200);
+      });
+      return;
+    }
+
     if (!img) return;
-
-    var dot = document.querySelector("[data-hero-hue]");
-    var name = document.querySelector("[data-hero-scene]");
-
-    /* Calibrated against assets/img/gallery/home-green.jpg — measured, not
-       computed, because CSS hue-rotate is a matrix approximation. The photo is
-       lit emerald against a black sky, which is what makes the rotation read as
-       a genuine relight instead of a colour cast over the sky.
-         0deg green · 60 cyan · 120 violet · 180 magenta · 240 orange · 270 amber */
     var STEPS = [
-      { rot: 0, sat: 1.35, bri: 1.0, c: "#34d399", label: "Emerald" },
-      { rot: 60, sat: 1.4, bri: 1.0, c: "#22d3ee", label: "Ice Cyan" },
+      { rot: 270, sat: 0.5, bri: 1.14, c: "#ffd166", label: "Warm White" },
+      { rot: 210, sat: 1.5, bri: 1.0, c: "#e5484d", label: "Christmas" },
       { rot: 120, sat: 1.4, bri: 1.0, c: "#a855f7", label: "Violet" },
-      { rot: 180, sat: 1.45, bri: 1.0, c: "#f0398b", label: "Magenta" },
-      { rot: 240, sat: 1.45, bri: 1.02, c: "#ff7a1a", label: "Sunset" },
-      { rot: 270, sat: 0.5, bri: 1.14, c: "#ffd166", label: "Warm White" }
+      { rot: 0, sat: 1.35, bri: 1.0, c: "#34d399", label: "Emerald" }
     ];
-
     var i = 0;
-
     var apply = function () {
       var s = STEPS[i % STEPS.length];
-      // Keep winding forwards so the transition always sweeps one way round the
-      // wheel instead of snapping back through every hue at the end of a lap.
       var rot = s.rot + 360 * Math.floor(i / STEPS.length);
-      img.style.filter =
-        "hue-rotate(" + rot + "deg) saturate(" + s.sat + ") brightness(" + s.bri + ")";
+      img.style.filter = "hue-rotate(" + rot + "deg) saturate(" + s.sat + ") brightness(" + s.bri + ")";
       if (dot) dot.style.setProperty("--hue", s.c);
       if (name) name.textContent = s.label;
       i++;
     };
-
     img.style.transition = "filter 2.4s cubic-bezier(.4,0,.2,1)";
-    // Open on warm white — the setting most homeowners actually live with.
-    i = 5;
     apply();
-
     if (reduceMotion) return;
-
-    var timer = setInterval(apply, 4200);
+    var timerLegacy = setInterval(apply, 4200);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { clearInterval(timer); timer = null; }
-      else if (!timer) timer = setInterval(apply, 4200);
+      if (document.hidden) { clearInterval(timerLegacy); timerLegacy = null; }
+      else if (!timerLegacy) timerLegacy = setInterval(apply, 4200);
     });
   })();
 
   /* ------------------------------------------------------------------
-     Lighting scenes — button driven.
-     The section starts switched off; each button relights the house.
-     Nothing here is tied to scroll position.
+     Lighting scenes — button driven with real client images.
      ------------------------------------------------------------------ */
   (function sceneSwitcher() {
     var scene = document.querySelector("[data-scene]");
     if (!scene) return;
 
+    var stageImg = scene.querySelector("[data-scene-img]");
     var title = document.querySelector("[data-scene-title]");
     var copy = document.querySelector("[data-scene-copy]");
-    var buttons = Array.prototype.slice.call(scene.querySelectorAll("[data-scene-stop]"));
+    var buttons = Array.prototype.slice.call(scene.querySelectorAll("[data-scene-stop], [data-scene-key]"));
 
-    /* Rotations are measured against home-green.jpg, not calculated — CSS
-       hue-rotate is a matrix approximation. See README before changing. */
-    var STOPS = [
-      { rot: 270, sat: 0.10, bri: 0.30, glow: 0.0, c: "#8a95ac",
-        title: "Off.",
-        copy: "Switched off it is a slim trim line under your roof edge, powder-coated to match your fascia. Most visitors never notice it is there at all." },
-      { rot: 270, sat: 0.50, bri: 1.14, glow: 0.20, c: "#ffd166",
-        title: "Every evening.",
-        copy: "Warm white from dusk to bedtime, on a schedule you set once. This is the setting most homeowners simply leave running all year." },
-      { rot: 240, sat: 1.50, bri: 1.02, glow: 0.28, c: "#ff7a1a",
-        title: "October.",
-        copy: "Orange and violet with flicker and chase effects. The house the whole street detours past on Halloween night." },
-      { rot: 210, sat: 1.55, bri: 1.00, glow: 0.30, c: "#e5484d",
-        title: "December.",
-        copy: "Red and green across every gable, live in one tap. No boxes in the garage, no ladder in the rain, nothing to take down in January." },
-      { rot: 360, sat: 1.40, bri: 1.00, glow: 0.26, c: "#34d399",
-        title: "March.",
-        copy: "Emerald for St. Patrick's, pastels for spring, your team's colours on game night. Changing the whole house takes about four seconds." },
-      { rot: 480, sat: 1.45, bri: 1.00, glow: 0.32, c: "#a855f7",
-        title: "Anything else.",
-        copy: "Sixteen million colours, every bulb addressable, hundreds of presets built in. Birthdays, anniversaries, or a colour that simply suits the evening." }
-    ];
+    var SCENE_DATA = {
+      "everyday": {
+        img: "assets/img/gallery/scene-everyday.jpg",
+        color: "#ffd166",
+        title: "Everyday.",
+        copy: "Warm white from dusk to bedtime, on a schedule you set once. This is the timeless architectural look homeowners enjoy all year round."
+      },
+      "halloween": {
+        img: "assets/img/gallery/scene-halloween.jpg",
+        color: "#a855f7",
+        title: "Halloween.",
+        copy: "Deep vibrant purple, eerie flicker, and themed accents. The house the entire neighborhood stops to photograph on October 31st."
+      },
+      "christmas": {
+        img: "assets/img/gallery/scene-christmas.jpg",
+        color: "#e5484d",
+        title: "Christmas.",
+        copy: "Festive red, green, and crisp white across every peak and gable in one tap. No tangled strings, zero ladder climbing in the winter cold."
+      },
+      "canada-day": {
+        img: "assets/img/gallery/scene-canada-day.jpg",
+        color: "#ff2d4f",
+        title: "Canada Day.",
+        copy: "Proud red and white roofline illumination celebrating July 1st, national holidays, and backyard summer celebrations."
+      },
+      "game-night": {
+        img: "assets/img/gallery/scene-game-night.jpg",
+        color: "#3b82f6",
+        title: "Game Night.",
+        copy: "Show off your team colors on game night. Vibrant blues, purples, and high-energy animations ready in four seconds from your phone."
+      }
+    };
 
-    var current = -1;
+    var current = null;
 
-    var show = function (idx, instant) {
-      if (idx === current) return;
-      current = idx;
-      var s = STOPS[idx];
+    var show = function (key, instant) {
+      if (key === current) return;
+      current = key;
+      var data = SCENE_DATA[key];
+      if (!data) return;
 
-      scene.style.setProperty("--scene-fx",
-        "hue-rotate(" + s.rot + "deg) saturate(" + s.sat + ") brightness(" + s.bri + ")");
-      scene.style.setProperty("--scene-glow", String(s.glow));
-      scene.style.setProperty("--scene-tint", s.c);
+      if (stageImg) {
+        if (instant) {
+          stageImg.src = data.img;
+        } else {
+          stageImg.style.transition = "opacity 0.22s var(--ease-out)";
+          stageImg.style.opacity = "0.3";
+          setTimeout(function () {
+            stageImg.src = data.img;
+            stageImg.style.opacity = "1";
+          }, 180);
+        }
+      }
 
-      buttons.forEach(function (btn, n) {
-        btn.classList.toggle("is-on", n === idx);
-        btn.setAttribute("aria-pressed", n === idx ? "true" : "false");
+      scene.style.setProperty("--scene-tint", data.color);
+
+      buttons.forEach(function (btn) {
+        var k = btn.dataset.sceneKey || (btn.dataset.sceneStop !== undefined ? Object.keys(SCENE_DATA)[parseInt(btn.dataset.sceneStop, 10)] : null);
+        var active = k === key;
+        btn.classList.toggle("is-on", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
       });
 
       if (instant) {
-        if (title) title.textContent = s.title;
-        if (copy) copy.textContent = s.copy;
+        if (title) title.textContent = data.title;
+        if (copy) copy.textContent = data.copy;
         return;
       }
 
       [title, copy].forEach(function (el) { if (el) el.classList.add("is-changing"); });
       setTimeout(function () {
-        if (title) title.textContent = s.title;
-        if (copy) copy.textContent = s.copy;
+        if (title) title.textContent = data.title;
+        if (copy) copy.textContent = data.copy;
         [title, copy].forEach(function (el) { if (el) el.classList.remove("is-changing"); });
       }, 200);
     };
 
     buttons.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        show(parseInt(btn.getAttribute("data-scene-stop"), 10), false);
+        var key = btn.dataset.sceneKey || Object.keys(SCENE_DATA)[parseInt(btn.dataset.sceneStop || "0", 10)] || "everyday";
+        show(key, false);
       });
     });
 
-    show(0, true);
+    show("everyday", true);
   })();
 
   /* ------------------------------------------------------------------
@@ -917,11 +962,119 @@
           '<span class="quote__av" aria-hidden="true">' + esc(initials(r.name)) + "</span>" +
           '<span class="quote__who"><strong>' + esc(r.name) + "</strong>" +
             where +
-            '<span class="quote__meta">Google review · ' + esc(r.date) + "</span>" +
+            '<span class="quote__meta"><a href="https://maps.app.goo.gl/UtMMNNwyxrQCGAqe6?g_st=ic" target="_blank" rel="noopener noreferrer">Google review · ' + esc(r.date) + "</a></span>" +
           "</span>" +
         "</figcaption>" +
       "</figure>"
     );
   }).join("");
 })();
+
+/* ==========================================================================
+   Crystal Lights — AI Lighting Assistant Bot
+   ========================================================================== */
+(function clAiBot() {
+  var widget = document.getElementById("clAiWidget");
+  var trigger = document.getElementById("clAiTrigger");
+  var modal = document.getElementById("clAiModal");
+  var closeBtn = document.getElementById("clAiClose");
+  var messages = document.getElementById("clAiMessages");
+  var form = document.getElementById("clAiForm");
+  var input = document.getElementById("clAiInput");
+  var prompts = document.getElementById("clAiPrompts");
+
+  if (!widget || !trigger || !modal) return;
+
+  var open = function () {
+    modal.classList.add("is-open");
+    trigger.setAttribute("aria-expanded", "true");
+    if (input) input.focus();
+  };
+
+  var close = function () {
+    modal.classList.remove("is-open");
+    trigger.setAttribute("aria-expanded", "false");
+  };
+
+  trigger.addEventListener("click", function () {
+    modal.classList.contains("is-open") ? close() : open();
+  });
+  if (closeBtn) closeBtn.addEventListener("click", close);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+  });
+
+  var appendMsg = function (html, isUser) {
+    var div = document.createElement("div");
+    div.className = "cl-ai-msg " + (isUser ? "cl-ai-msg--user" : "cl-ai-msg--bot");
+    div.innerHTML = html;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  };
+
+  var botTyping = function (replyHtml) {
+    var typing = document.createElement("div");
+    typing.className = "cl-ai-msg cl-ai-msg--bot";
+    typing.innerHTML = "<em>Crystal AI is typing...</em>";
+    messages.appendChild(typing);
+    messages.scrollTop = messages.scrollHeight;
+
+    setTimeout(function () {
+      if (typing.parentNode) typing.parentNode.removeChild(typing);
+      appendMsg(replyHtml, false);
+    }, 400);
+  };
+
+  var RESPONSES = {
+    cost: "<p>Pricing depends on your roofline length, architectural peaks, and chosen layout. We provide <strong>free, fixed written quotes</strong> with zero hidden fees covering all materials, certified installation, app setup, and a 10-year warranty.</p><p><a href='contact.html'>Click here to request your free quote &rarr;</a> or call us at <a href='tel:+16046794087'>604-679-4087</a>!</p>",
+    daytime: "<p>Our lights are designed to be <strong>virtually invisible by day</strong>! We install custom-extruded aluminum tracks powder-coated to match your fascia or trim colour (white, black, bronze, or brown). Bulbs sit recessed facing downward, reading as clean architectural trim from the street.</p>",
+    warranty: "<p>We back every installation with an industry-leading <strong>10-Year Comprehensive Warranty</strong> on parts, labour, tracks, and controllers! If a bulb or connection ever fails, our team comes out to fix it at zero cost.</p>",
+    areas: "<p>We proudly serve across British Columbia:<br>• <strong>Lower Mainland:</strong> Vancouver, Burnaby, Richmond, Surrey, Langley, Coquitlam, Delta, Abbotsford, etc.<br>• <strong>Vancouver Island:</strong> Victoria, Nanaimo, Duncan, Courtenay, Campbell River, etc.<br>• <strong>The Okanagan:</strong> Kelowna, West Kelowna, Vernon, Penticton, etc.</p>",
+    app: "<p>Our smartphone app gives you full control over <strong>16 million+ colours</strong>, individual bulb customization, 1,000+ holiday presets (Christmas, Halloween, Diwali, Canada Day, sports teams), customizable animations, brightness dimming, and automated sunset/sunrise scheduling!</p>",
+    quote: "<p>We'd love to light up your home! Our consultations are 100% free with no deposit and no obligation. <a href='contact.html'><strong>Click here to book your consultation &rarr;</strong></a> or call Love and the team directly at <a href='tel:+16046794087'>604-679-4087</a>.</p>"
+  };
+
+  if (prompts) {
+    prompts.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-prompt]");
+      if (!btn) return;
+      var key = btn.dataset.prompt;
+      appendMsg(btn.textContent, true);
+      botTyping(RESPONSES[key] || RESPONSES.quote);
+    });
+  }
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var q = input.value.trim();
+      if (!q) return;
+      appendMsg(q, true);
+      input.value = "";
+
+      var lower = q.toLowerCase();
+      var reply = "";
+
+      if (lower.indexOf("cost") > -1 || lower.indexOf("price") > -1 || lower.indexOf("quote") > -1 || lower.indexOf("estimate") > -1 || lower.indexOf("rate") > -1) {
+        reply = RESPONSES.cost;
+      } else if (lower.indexOf("day") > -1 || lower.indexOf("invis") > -1 || lower.indexOf("track") > -1 || lower.indexOf("look") > -1) {
+        reply = RESPONSES.daytime;
+      } else if (lower.indexOf("warrant") > -1 || lower.indexOf("guarantee") > -1 || lower.indexOf("years") > -1) {
+        reply = RESPONSES.warranty;
+      } else if (lower.indexOf("area") > -1 || lower.indexOf("where") > -1 || lower.indexOf("location") > -1 || lower.indexOf("surrey") > -1 || lower.indexOf("vancouver") > -1 || lower.indexOf("island") > -1 || lower.indexOf("okanagan") > -1) {
+        reply = RESPONSES.areas;
+      } else if (lower.indexOf("app") > -1 || lower.indexOf("phone") > -1 || lower.indexOf("color") > -1 || lower.indexOf("timer") > -1 || lower.indexOf("preset") > -1) {
+        reply = RESPONSES.app;
+      } else if (lower.indexOf("phone") > -1 || lower.indexOf("contact") > -1 || lower.indexOf("call") > -1 || lower.indexOf("number") > -1 || lower.indexOf("email") > -1) {
+        reply = "<p>You can reach us directly anytime at <a href='tel:+16046794087'><strong>604-679-4087</strong></a> or email <a href='mailto:info@crystallights.ca'><strong>info@crystallights.ca</strong></a>. We respond within one business day!</p>";
+      } else {
+        reply = "<p>Thank you for asking! Crystal Lights installs permanent, app-controlled outdoor lighting built for BC weather with a 10-year warranty. We would be happy to walk your property and provide a free layout and fixed quote.<br><br><a href='contact.html'><strong>Book a Free Consultation &rarr;</strong></a> or call us at <a href='tel:+16046794087'>604-679-4087</a>.</p>";
+      }
+
+      botTyping(reply);
+    });
+  }
+})();
+
 
