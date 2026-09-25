@@ -731,12 +731,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
   margin-top: 1.5rem;
   max-width: 15ch;
 }
-.hero__title .accent { display: block; font-weight: 400; letter-spacing: -0.02em; }
 .hero__title .spectrum-text {
   font-family: var(--font-display) !important;
   font-style: normal !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
+  font-size: 1.25em !important;
+  display: inline-block;
+  line-height: 1.05;
   letter-spacing: -0.045em !important;
+  margin-top: 0.05em;
 }
 
 .hero__sub {
