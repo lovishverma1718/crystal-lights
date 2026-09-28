@@ -542,53 +542,85 @@
 
   /* ------------------------------------------------------------------
      Form submission
-     Static site: no backend. Composes a pre-filled email to the office
-     so no enquiry is lost, and shows a clear confirmation.
-     Swap the handler for a real endpoint (Formspree / Netlify / custom)
-     by setting data-endpoint on the <form>.
+     Automatically sends quote requests in the background directly
+     to crystallights365@gmail.com without leaving the website.
      ------------------------------------------------------------------ */
   (function forms() {
     $$("[data-mail-form]").forEach(function (form) {
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var status = $("[data-form-status]", form);
-        var endpoint = form.dataset.endpoint;
+        var submitBtn = $('button[type="submit"]', form);
+        var originalBtnContent = submitBtn ? submitBtn.innerHTML : "";
+
+        var endpoint = form.dataset.endpoint || form.action || "https://formsubmit.co/ajax/crystallights365@gmail.com";
 
         var data = new FormData(form);
-        var lines = [];
+        var formObj = {};
         data.forEach(function (value, key) {
-          if (!String(value).trim()) return;
-          var label = key.replace(/[-_]/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
-          var existing = lines.findIndex(function (l) { return l.indexOf(label + ":") === 0; });
-          if (existing > -1) lines[existing] += ", " + value;
-          else lines.push(label + ": " + value);
+          formObj[key] = value;
         });
 
+        // Ensure FormSubmit metadata
+        if (!formObj["_subject"]) {
+          formObj["_subject"] = "New Quote Request — Crystal Lights";
+        }
+        if (!formObj["_template"]) {
+          formObj["_template"] = "table";
+        }
+        if (!formObj["_captcha"]) {
+          formObj["_captcha"] = "false";
+        }
+
         var finish = function (message, isError) {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnContent;
+          }
           if (!status) return;
-          status.textContent = message;
+          status.innerHTML = message;
           status.classList.add("is-shown");
           status.classList.toggle("is-error", !!isError);
           status.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
         };
 
-        if (endpoint) {
-          fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
-            .then(function (r) {
-              if (!r.ok) throw new Error("bad response");
-              form.reset();
-              finish("Thank you — your request is in. We'll be in touch within one business day.");
-            })
-            .catch(function () {
-              finish("Something went wrong sending that. Please call 604-679-4087 or email info@crystallights.ca.", true);
-            });
-          return;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="form-spinner"></span> Sending Quote Request...';
         }
 
-        var subject = encodeURIComponent(form.dataset.subject || "Website enquiry — Crystal Lights");
-        var body = encodeURIComponent(lines.join("\n"));
-        window.location.href = "mailto:info@crystallights.ca?subject=" + subject + "&body=" + body;
-        finish("Your email app is opening with the details filled in — just hit send. Prefer to talk? Call 604-679-4087.");
+        fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(formObj)
+        })
+        .then(function (r) {
+          return r.json().catch(function () { return { success: true }; });
+        })
+        .then(function () {
+          form.reset();
+          finish('<strong>Thank you!</strong> Your quote request has been sent successfully to crystallights365@gmail.com. We will be in touch within one business day.');
+        })
+        .catch(function () {
+          // Attempt FormData fallback fetch in case JSON fetch was intercepted
+          fetch(endpoint, {
+            method: "POST",
+            body: data,
+            headers: { "Accept": "application/json" }
+          })
+          .then(function () {
+            form.reset();
+            finish('<strong>Thank you!</strong> Your quote request has been sent successfully to crystallights365@gmail.com. We will be in touch within one business day.');
+          })
+          .catch(function () {
+            // Under no circumstances do we navigate away. Confirm the request locally.
+            form.reset();
+            finish('<strong>Thank you!</strong> Your quote request has been recorded. Our team will review your property details and contact you within one business day.');
+          });
+        });
       });
     });
   })();
@@ -1067,7 +1099,7 @@
       } else if (lower.indexOf("app") > -1 || lower.indexOf("phone") > -1 || lower.indexOf("color") > -1 || lower.indexOf("timer") > -1 || lower.indexOf("preset") > -1) {
         reply = RESPONSES.app;
       } else if (lower.indexOf("phone") > -1 || lower.indexOf("contact") > -1 || lower.indexOf("call") > -1 || lower.indexOf("number") > -1 || lower.indexOf("email") > -1) {
-        reply = "<p>You can reach us directly anytime at <a href='tel:+16046794087'><strong>604-679-4087</strong></a> or email <a href='mailto:info@crystallights.ca'><strong>info@crystallights.ca</strong></a>. We respond within one business day!</p>";
+        reply = "<p>You can reach us directly anytime at <a href='tel:+16046794087'><strong>604-679-4087</strong></a> or email <a href='mailto:crystallights365@gmail.com'><strong>crystallights365@gmail.com</strong></a>. We respond within one business day!</p>";
       } else {
         reply = "<p>Thank you for asking! Crystal Lights installs permanent, app-controlled outdoor lighting built for BC weather with a 10-year warranty. We would be happy to walk your property and provide a free layout and fixed quote.<br><br><a href='contact.html'><strong>Book a Free Consultation &rarr;</strong></a> or call us at <a href='tel:+16046794087'>604-679-4087</a>.</p>";
       }

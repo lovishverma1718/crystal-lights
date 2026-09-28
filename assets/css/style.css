@@ -2,6 +2,7 @@
    Crystal Lights — Core Stylesheet
    Permanent outdoor LED lighting · British Columbia
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 /* --------------------------------------------------------------------------
    1. Design tokens
@@ -139,7 +140,7 @@ h1, h2, h3, h4, h5, legend {
 }
 
 /* Optical sizing: the bigger the type, the tighter it wants to be. */
-.h-display, .hero__title, .cta-band h2 { letter-spacing: -0.05em; font-weight: 700; }
+.h-display, .cta-band h2 { letter-spacing: -0.05em; font-weight: 700; }
 .h2 { letter-spacing: -0.04em; }
 
 p { text-wrap: pretty; }
@@ -725,21 +726,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .hero__title {
-  font-size: var(--step-5);
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-family: 'Bebas Neue', var(--font-display), sans-serif;
+  font-size: clamp(3.8rem, 2rem + 8.5vw, 9.2rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 0.92;
+  text-transform: uppercase;
   margin-top: 1.5rem;
   max-width: 15ch;
 }
 .hero__title .spectrum-text {
-  font-family: var(--font-display) !important;
+  font-family: 'Bebas Neue', var(--font-display), sans-serif !important;
   font-style: normal !important;
-  font-weight: 800 !important;
-  font-size: 1.25em !important;
+  font-weight: 400 !important;
+  font-size: 1.18em !important;
   display: inline-block;
-  line-height: 1.05;
-  letter-spacing: -0.045em !important;
+  line-height: 0.92;
+  letter-spacing: 0.03em !important;
   margin-top: 0.05em;
+  text-transform: uppercase;
 }
 
 .hero__sub {
@@ -1751,6 +1756,21 @@ input[type="range"]::-moz-range-thumb {
 }
 .form__status.is-shown { display: block; }
 .form__status.is-error { border-color: rgba(240, 57, 139, 0.4); background: rgba(240, 57, 139, 0.1); color: #ffa6c9; }
+
+.form-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: formSpin 0.7s linear infinite;
+  vertical-align: -2px;
+  margin-right: 0.5rem;
+}
+@keyframes formSpin {
+  to { transform: rotate(360deg); }
+}
 
 /* Multi-step quote builder */
 .steps-bar { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem; }
