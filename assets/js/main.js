@@ -16,18 +16,35 @@
 
   /* ------------------------------------------------------------------
      Sticky header
+     Navbar becomes sticky once the topbar scrolls off (scrollY > 35)
      ------------------------------------------------------------------ */
   (function stickyHeader() {
     var header = $(".site-header");
-    var wrap = $(".header-wrap");
     if (!header) return;
     var onScroll = function () {
-      var isStuck = window.scrollY > 12;
+      var isStuck = window.scrollY > 35;
       header.classList.toggle("is-stuck", isStuck);
-      if (wrap) wrap.classList.toggle("is-stuck", isStuck);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+  })();
+
+  /* ------------------------------------------------------------------
+     Input typing comfort: hide floating widgets when typing on mobile
+     ------------------------------------------------------------------ */
+  (function typingWatcher() {
+    var onFocus = function (e) {
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT")) {
+        document.body.classList.add("is-typing");
+      }
+    };
+    var onBlur = function (e) {
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT")) {
+        document.body.classList.remove("is-typing");
+      }
+    };
+    document.addEventListener("focusin", onFocus, true);
+    document.addEventListener("focusout", onBlur, true);
   })();
 
   /* ------------------------------------------------------------------

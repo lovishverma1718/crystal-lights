@@ -377,22 +377,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* --------------------------------------------------------------------------
    7. Header / navigation
    -------------------------------------------------------------------------- */
-.header-wrap {
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  width: 100%;
-}
-.header-wrap .topbar {
-  position: relative;
-  z-index: 2;
-}
-.header-wrap .site-header {
-  position: relative;
-  top: auto;
-  z-index: 1;
-}
-
 .topbar {
   position: relative;
   z-index: 60;
@@ -434,8 +418,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border-bottom: 1px solid transparent;
 }
 
-.site-header.is-stuck,
-.header-wrap.is-stuck .site-header {
+.site-header.is-stuck {
   background: rgba(7, 10, 18, 0.88);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -1939,14 +1922,20 @@ input[type="range"]::-moz-range-thumb {
   display: none;
   gap: 0.6rem;
   transform: translateY(150%);
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.4s var(--ease-out), opacity 0.25s, visibility 0.25s;
 }
 .dock.is-shown { transform: none; }
 .dock .btn { flex: 1; }
 @media (max-width: 640px) {
   .dock { display: flex; }
   /* Keep the fixed dock from sitting on top of the footer. */
-  body { padding-bottom: 5.25rem; }
+  body:not(.page-contact) { padding-bottom: 5.25rem; }
+}
+
+/* Never show the redundant floating quote dock on the contact/quote page */
+.page-contact .dock,
+body.page-contact .dock {
+  display: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -2669,6 +2658,51 @@ button.scene__tick.is-on i { background: var(--ink-000); box-shadow: none; }
   right: 24px;
   z-index: 999;
   font-family: var(--font-body);
+  transition: transform 0.35s var(--ease-out), opacity 0.25s var(--ease-out), visibility 0.25s;
+}
+
+@media (max-width: 640px) {
+  .cl-ai-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+  /* On pages with dock, sit above dock so they NEVER overlap */
+  body:not(.page-contact) .dock.is-shown ~ .cl-ai-widget,
+  body:not(.page-contact):has(.dock.is-shown) .cl-ai-widget {
+    bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
+  }
+  .cl-ai-trigger {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.8rem;
+    gap: 0.45rem;
+    box-shadow: 0 8px 24px -6px rgba(246, 185, 59, 0.45), 0 3px 10px rgba(0, 0, 0, 0.4);
+  }
+  .cl-ai-trigger__icon {
+    width: 24px;
+    height: 24px;
+  }
+  .cl-ai-trigger__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ==========================================================================
+   Typing Comfort: Auto-hide floating widgets when typing or keyboard is open
+   Prevents mobile overlap on input fields (Email, Address, etc.)
+   ========================================================================== */
+body.is-typing .dock,
+body.is-typing .cl-ai-widget,
+body:has(input:focus) .dock,
+body:has(input:focus) .cl-ai-widget,
+body:has(textarea:focus) .dock,
+body:has(textarea:focus) .cl-ai-widget,
+body:has(select:focus) .dock,
+body:has(select:focus) .cl-ai-widget {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(120%) !important;
 }
 
 .cl-ai-trigger {
