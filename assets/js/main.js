@@ -589,6 +589,17 @@
           submitBtn.innerHTML = '<span class="form-spinner"></span> Sending Quote Request...';
         }
 
+        // Backup submission to Netlify Forms (stores in Netlify Dashboard)
+        try {
+          var netlifyParams = new URLSearchParams(data);
+          netlifyParams.set("form-name", "quote");
+          fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: netlifyParams.toString()
+          }).catch(function () {});
+        } catch (err) {}
+
         fetch(endpoint, {
           method: "POST",
           headers: {
@@ -600,7 +611,12 @@
         .then(function (r) {
           return r.json().catch(function () { return { success: true }; });
         })
-        .then(function () {
+        .then(function (res) {
+          if (res && res.success === "false" && res.message && res.message.toLowerCase().indexOf("activation") > -1) {
+            form.reset();
+            finish('<strong>Almost done!</strong> FormSubmit sent an activation link to <em>crystallights365@gmail.com</em>. Please check the Spam/Inbox folder and click "Activate Form" once to complete setup.', false);
+            return;
+          }
           form.reset();
           finish('<strong>Thank you!</strong> Your quote request has been sent successfully to crystallights365@gmail.com. We will be in touch within one business day.');
         })
