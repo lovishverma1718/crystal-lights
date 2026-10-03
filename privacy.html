@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=20261001v2">
+<link rel="stylesheet" href="assets/css/style.css?v=20261003v1">
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -259,22 +259,17 @@
   </div>
 </div>
 
-<!-- ========================= MOBILE DOCK ========================= -->
-<div class="dock" data-dock>
-  <a class="btn btn--ghost" href="tel:+16046794087">Call</a>
-  <a class="btn" href="contact.html">Free Quote</a>
-</div>
-
 <!-- ========================= AI LIGHTING ASSISTANT ========================= -->
 <div class="cl-ai-widget" id="clAiWidget">
-  <button class="cl-ai-trigger" id="clAiTrigger" type="button" aria-expanded="false" aria-label="Open Crystal Lights AI Assistant">
+  <button class="cl-ai-trigger" id="clAiTrigger" type="button" aria-expanded="false" aria-label="Ask Crystal AI" data-tooltip="Ask Crystal AI" title="Ask Crystal AI">
     <span class="cl-ai-trigger__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 18v4"/><path d="m16.24 16.24 2.83 2.83"/><path d="M18 12h4"/><path d="m16.24 7.76 2.83-2.83"/>
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L14.2 8.8L21 11L14.2 13.2L12 20L9.8 13.2L3 11L9.8 8.8L12 2Z"/>
+        <path d="M19 15L20 18L23 19L20 20L19 23L18 20L15 19L18 18L19 15Z"/>
+        <path d="M5 3L5.7 5.3L8 6L5.7 6.7L5 9L4.3 6.7L2 6L4.3 5.3L5 3Z"/>
       </svg>
     </span>
-    <span>Ask Crystal AI</span>
-    <span class="cl-ai-trigger__badge">Online</span>
+    <span class="cl-ai-status-dot" aria-hidden="true"></span>
   </button>
 
   <div class="cl-ai-modal" id="clAiModal" role="dialog" aria-modal="true" aria-label="Crystal Lights AI Assistant">
@@ -317,6 +312,6 @@
   </div>
 </div>
 
-<script src="assets/js/main.js?v=20261001v2" defer></script>
+<script src="assets/js/main.js?v=20261003v1" defer></script>
 </body>
 </html>

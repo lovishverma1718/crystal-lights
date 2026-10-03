@@ -488,17 +488,9 @@
   })();
 
   /* ------------------------------------------------------------------
-     Mobile dock CTA
+     Mobile dock CTA (disabled per client request)
      ------------------------------------------------------------------ */
-  (function dock() {
-    var el = $("[data-dock]");
-    if (!el) return;
-    var onScroll = function () {
-      el.classList.toggle("is-shown", window.scrollY > 600);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-  })();
+  // Mobile floating dock disabled.
 
   /* ------------------------------------------------------------------
      Quote builder (multi-step)
